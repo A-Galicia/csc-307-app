@@ -7,7 +7,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm -w react-frontend run dev",
+    "build": "npm -w react-frontend run build",
+    "lint": "npm -w react-frontend run lint",
+    "preview": "npm -w react-frontend run preview"
   },
   "workspaces": [
     "packages/*"
