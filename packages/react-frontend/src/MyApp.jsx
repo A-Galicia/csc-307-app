@@ -33,17 +33,39 @@ function MyApp() {
 
   function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then((res) => {
+        if (res.status != 201) {
+          throw new Error('adding user');
+        } else {
+          //setCharacters([...characters, res.json()]);
+          return res.json();
+        }
+      })
+      .then((json) => setCharacters([...characters, json]))
       .catch((error) => {
         console.log(error);
       });
   }
 
   function removeOneCharacter(index) {
+    let id;
     const updated = characters.filter((character, i) => {
+      if (i == index) id = character.id;
       return i !== index;
     });
-    setCharacters(updated);
+
+    fetch(`Http://localhost:8000/users/${id}`, {
+      method: 'DELETE',
+    })
+    .then((res) => {
+      if (res.status != 204){
+        throw new Error(`deleting user ${id}`)
+      }
+      else {
+        setCharacters(updated);
+      }
+    })
+    .catch((error) => console.log(error));
   }
 
   return (

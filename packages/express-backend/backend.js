@@ -45,19 +45,10 @@ const findUserByName = (name) => {
   return users['users_list'].filter((user) => user['name'] === name);
 };
 
-/* app.get('/users', (req, res) => {
-  const name = req.query.name;
-  if (name != undefined) {
-    let result = findUserByName(name);
-    result = { users_list: result };
-    res.send(result);
-  } else {
-    res.send(users);
-  }
-}); */
-
 const findUserByNameAndJob = (name, job) => {
-  return users['users_list'].filter((user) => user['name'] === name && user['job'] === job);
+  return users['users_list'].filter(
+    (user) => user['name'] === name && user['job'] === job,
+  );
 };
 
 app.get('/users', (req, res) => {
@@ -73,7 +64,7 @@ app.get('/users', (req, res) => {
 });
 
 const findUserById = (id) =>
-  users['users_list'].find((user) => user['id'] === id);
+  users['users_list'].find((user) => user['id'] == id);
 
 app.get('/users/:id', (req, res) => {
   const id = req.params['id']; //or req.params.id
@@ -86,35 +77,39 @@ app.get('/users/:id', (req, res) => {
 });
 
 const addUser = (user) => {
-  users['users_list'].push(user);
-  return user;
+  const newUser = {
+    id: Math.random(),
+    ...user,
+  };
+  users['users_list'].push(newUser);
+  return newUser;
 };
 
 app.post('/users', (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  const newUser = addUser(userToAdd);
+  res.status(201).send(newUser);
 });
 
-const deleteUserByName = (name) => {
-  const res = findUserByName(name);
+const deleteUserById = (id) => {
+  const res = findUserById(id);
   if (res === undefined) return undefined;
 
   users['users_list'] = users['users_list'].filter(
-    (user) => user['name'] !== name,
+    (user) => user['id'] != id,
   );
 
   // return deleted users
   return res;
 };
 
-app.delete('/users/:name', (req, res) => {
-  const name = req.params['name']; //or req.params.name
-  let result = deleteUserByName(name);
+app.delete('/users/:id', (req, res) => {
+  const id = req.params['id'];
+  let result = deleteUserById(id);
   if (result === undefined) {
     res.status(404).send('Resource not found.');
   } else {
-    res.send();
+    res.status(204).send();
   }
 });
 
