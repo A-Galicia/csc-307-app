@@ -33,6 +33,8 @@ function Form( props ) {
         name='job'
         id='job'
         value={person.job}
+        minLength={2}
+        required
         onChange={handleChange}
       />
       <input type='button' value='Submit' onClick={submitForm} />
