@@ -1,14 +1,17 @@
 function sum(a, b) {
-  return a + b;
+  if (!a || !b) return 0;
+  return Number(a) + Number(b);
 }
 
 function div(a, b) {
-  return a / b;
+  if (a == null || b == null) return 0
+  return Number(a) / Number(b);
 }
 
 function containsNumbers(text) {
+  if (!text) return false;
   for (let i = 0; i < text.length; i++) {
-    if (!isNaN(text.charAt(i))) return true;
+    if (/\d/.test(text.charAt(i))) return true;
   }
   return false;
 }
